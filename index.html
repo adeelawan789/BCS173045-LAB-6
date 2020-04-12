@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQueryAjaxInAsp.NetMVC</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="script.js"></script>
+</head>
+<body>
+   <body class="" style="">
+    <div class="container">
+        <h2>please insert the data</h2>
+        <form>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Id</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="id" placeholder="Id">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" placeholder="Name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Age</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="age" placeholder="Age">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Height</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="height" placeholder="Height">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">CNIC</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="cnic" placeholder="CNIC">
+                </div>
+            </div>
+            <div class="form-group row">
+                
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-primary" id="addbtn">Add Person</button>
+                </div>
+            </div>
+        </form>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Height</th>
+                    <th>Cnic</th>
+                </tr>
+            </thead>
+            <tbody id="emptbody"><tr><td>1234</td><td>danish</td><td>14</td><td>2</td><td>54545544</td><td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="editPerson('1234')">Edit</button> | <button type="button" class="btn btn-danger" onclick="deletePerson('1234')">Delete</button></td></tr><tr><td>1235</td><td>jawad</td><td>14</td><td>2</td><td>54545544</td><td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="editPerson('1235')">Edit</button> | <button type="button" class="btn btn-danger" onclick="deletePerson('1235')">Delete</button></td></tr><tr><td>145</td><td>hameed</td><td>20</td><td>4.5</td><td>454566</td><td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="editPerson('145')">Edit</button> | <button type="button" class="btn btn-danger" onclick="deletePerson('145')">Delete</button></td></tr><tr><td>9098</td><td>naeem ahmed</td><td>48</td><td>7.5</td><td>198987854</td><td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="editPerson('9098')">Edit</button> | <button type="button" class="btn btn-danger" onclick="deletePerson('9098')">Delete</button></td></tr></tbody>
+        </table>
+
+
+
+      
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Person</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Id</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="eid" placeholder="Id">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="ename" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Age</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="eage" placeholder="Age">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Height</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="eheight" placeholder="Height">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Cnic</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="ecnic" placeholder="CNIC">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="updateButton" class="btn btn-primary">Update changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            getPersonData();
+
+            $("#addbtn").click(function () {
+                var id = $("#id").val();
+                var name = $("#name").val();
+                var age = $("#age").val();
+                var height = $("#height").val();
+                var cnic = $("#cnic").val();
+                var jsonObj = { ID: id, Name: name, Age: age, Height: height, CNIC: cnic };
+                console.log(jsonObj);
+                $.ajax({
+                    type: "POST",
+                    url: "http://labapi.somee.com/api/Person",
+                    data: jsonObj,
+                    success: function (result) {
+                       getPersonData();
+                    },
+                    failure: function (result) {
+                        alert("Failure");
+                    },
+                    error: function (result) {
+                        alert("Error");
+                    },
+                });
+            });
+
+            $("#updateButton").click(function () {
+                var id = $("#eid").val();
+                var name = $("#ename").val();
+                var age = $("#eage").val();
+                var height = $("#eheight").val();
+                var cnic = $("#ecnic").val();
+                var jsonObj = { ID: id, Name: name, Age: age, Height: height, CNIC: cnic };
+                var Url = "http://labapi.somee.com/api/Person/" + id;
+
+                $.ajax({
+                    type: "PUT",
+                    url: Url,
+                    data: JSON.stringify(jsonObj),
+                    contentType: "application/json;charset=utf-8",
+                    success: function (res) {
+                        getPersonData();
+                        $("#exampleModal").modal("hide");
+                    },
+                    failure: function (result) {
+                        alert("Failure");
+                    },
+                    error: function (result) {
+                        alert("Error");
+                    },
+                });
+            });
+        });
+
+       function getPersonData() {
+                $("#emptbody").html("");
+                $.ajax({
+                    type: "GET",
+                    url: "http://labapi.somee.com/api/Person",
+                    success: function (res) {
+                        for (r in res) {
+                            $("#emptbody").append("<tr><td>" + res[r].ID + "</td><td>" + res[r].Name + "</td><td>" + res[r].Age + "</td><td>" + res[r].Height + "</td><td>" + res[r].CNIC + "</td><td><button type='button' class='btn btn-info' data-toggle='modal' data-target='#exampleModal' onclick=editPerson('" + res[r].ID + "')>Edit</button> | <button type='button' class='btn btn-danger' onclick=deletePerson('" + res[r].ID + "')>Delete</button></td></tr>")
+                        }
+                    },
+                    failure: function (res) {
+                        alert("Failed");
+                    },
+                    error: function (res) {
+                        alert("Error");
+                    }
+                });
+        }
+        function editPerson(id) {
+            var editUrl = "http://labapi.somee.com/api/Person/" + id;
+            $.ajax({
+                    type: "GET",
+                    url: editUrl,
+                    success: function (res) {
+                        $("#eid").val(res.ID);
+                        $("#ename").val(res.Name);
+                        $("#eage").val(res.Age);
+                        $("#eheight").val(res.Height);
+                        $("#ecnic").val(res.CNIC);
+                    },
+                    failure: function (res) {
+                        alert("Failed");
+                    },
+                    error: function (res) {
+                        alert("Error");
+                    }
+                });
+        }
+        function deletePerson(id) {
+            var delUrl = "http://labapi.somee.com/api/Person/" + id;
+            $.ajax({
+                    type: "DELETE",
+                    url: delUrl,
+                    success: function (res) {
+                        getPersonData();
+                    },
+                    failure: function (res) {
+                        alert("Failed");
+                    },
+                    error: function (res) {
+                        alert("Error");
+                    }
+                });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+
+<script language="JavaScript" src="http://ads.mgmt.somee.com/serveimages/ad2/WholeInsert4.js"></script><div style="height: 65px;">    </div>    <div style="opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;">    </div>    <div onmouseover="S_ssac();" onmouseout="D_ssac();" style="position: fixed; z-index: 2147483647; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: transparent; margin: 0px; padding: 0px;">        <div style="width: 100%; color: White; font-family: &quot;Helvetica Neue&quot;, &quot;Lucida Grande&quot;, &quot;Segoe UI&quot;, Arial, Helvetica, Verdana, sans-serif; font-size: 11pt;">            <div style="margin-right: auto; margin-left: auto; display: table;  padding:9px; font-size:13pt;">                <a href="http://somee.com/VirtualServer.aspx" style=" text-decoration: none; color:White; margin-right:6px; margin-left:6px;">Hosted Windows Virtual Server. 2.5GHz CPU, 1.5GB RAM, 60GB SSD. Try it now for $1!</a>             </div>            <div style="margin-right: auto; margin-left: auto; display: table; font-size: 9pt; ">                <a href="http://somee.com" style=" text-decoration: none; color:White; margin-right:6px; margin-left:6px; font-size: 10pt;">Web hosting by Somee.com</a>            </div>        </div>    </div></body>tstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+</textarea></xml></script></noframes></noscript></object></layer></style></title></applet>
+<script language="JavaScript" src="http://ads.mgmt.somee.com/serveimages/ad2/WholeInsert4.js"></script>
